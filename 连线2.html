@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SVG Polyline Anchor Drag</title>
+  </head>
+  <body>
+    <svg id="svg" overflow="visible" width="400" height="400" >
+      <path id="line" d="M 100 100 L400 100" stroke="black" stroke-width="2" fill="none"/>
+  <circle id="start" cx="100" cy="100" r="6" fill="blue" />
+  <circle id="middle1" cx="200" cy="100" r="6" fill="blue" />
+  <circle id="middle2" cx="300" cy="100" r="6" fill="blue" />
+      <circle id="end" cx="400" cy="100" r="6" fill="blue" />
+</svg>
+    <script>
+     const line = document.getElementById('line');
+  const start = document.getElementById('start');
+  const middle1 = document.getElementById('middle1');
+  const middle2 = document.getElementById('middle2');
+  const end = document.getElementById('end');
+
+  let activeElement = null;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  const startDrag = (e) => {
+    activeElement = e.target;
+    offsetX = e.clientX - activeElement.getAttribute('cx');
+    offsetY = e.clientY - activeElement.getAttribute('cy');
+  };
+
+  const drag = (e) => {
+    if (activeElement) {
+      const pt = getEventPoint(e);
+      activeElement.setAttribute('cx', pt.x - offsetX);
+      activeElement.setAttribute('cy', pt.y - offsetY);
+      updatePolyline();
+    }
+  };
+
+  const stopDrag = (e) => {
+    activeElement = null;
+  };
+
+  const getEventPoint = (e) => {
+    const svg =  document.getElementById('svg')
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX;
+    pt.y = e.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  };
+
+  const updatePolyline = () => {
+    line.setAttribute('d', `M ${start.getAttribute('cx')} ${start.getAttribute('cy')} L ${middle1.getAttribute('cx')} ${middle1.getAttribute('cy')} L ${middle2.getAttribute('cx')} ${middle2.getAttribute('cy')} L ${end.getAttribute('cx')} ${end.getAttribute('cy')}`);
+  };
+
+  start.addEventListener('mousedown', startDrag);
+  middle1.addEventListener('mousedown', startDrag);
+  middle2.addEventListener('mousedown', startDrag);
+  end.addEventListener('mousedown', startDrag);
+
+  document.addEventListener('mousemove', drag);
+  document.addEventListener('mouseup', stopDrag);
+    </script>
+  </body>
+</html>

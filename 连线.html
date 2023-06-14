@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SVG Polyline Anchor Drag</title>
+  </head>
+  <body>
+  <svg width="500" height="500">
+    <path id="line" d="M 100 250 L 400 250" stroke="black" stroke-width="2" fill="none" />
+    <circle id="start" cx="100" cy="250" r="8" fill="white" stroke="black" stroke-width="2" />
+    <circle id="end" cx="400" cy="250" r="8" fill="white" stroke="black" stroke-width="2" />
+    <circle id="mid1" cx="200" cy="250" r="8" fill="white" stroke="black" stroke-width="2" />
+    <circle id="mid2" cx="300" cy="250" r="8" fill="white" stroke="black" stroke-width="2" />
+  </svg>
+    <script>
+      const start = document.getElementById('start');
+      const end = document.getElementById('end');
+      const mid1 = document.getElementById('mid1');
+      const mid2 = document.getElementById('mid2');
+      const line = document.getElementById('line');
+      const svg = document.querySelector('svg');
+      const svgRect = svg.getBoundingClientRect();
+      const svgPadding = 10;
+
+      let startCoords = { x: 0, y: 0 };
+      let endCoords = { x: 0, y: 0 };
+      let mid1Coords = { x: 0, y: 0 };
+      let mid2Coords = { x: 0, y: 0 };
+      let isDraggingStart = false;
+      let isDraggingEnd = false;
+      let isDraggingMid1 = false;
+      let isDraggingMid2 = false;
+
+      function getMouseCoords(event) {
+        const svg = document.querySelector('svg');
+        const pt = svg.createSVGPoint();
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+        return pt.matrixTransform(svg.getScreenCTM().inverse());
+      }
+
+      function startDragStart(event) {
+        isDraggingStart = true;
+        startCoords = getMouseCoords(event);
+      }
+
+      function startDragEnd(event) {
+        isDraggingEnd = true;
+        endCoords = getMouseCoords(event);
+      }
+
+      function startDragMid1(event) {
+        isDraggingMid1 = true;
+        mid1Coords = getMouseCoords(event);
+      }
+
+      function startDragMid2(event) {
+        isDraggingMid2 = true;
+        mid2Coords = getMouseCoords(event);
+      }
+
+      function drag(event) {
+        if (isDraggingStart) {
+          const coords = getMouseCoords(event);
+          const dx = coords.x - startCoords.x;
+          const dy = coords.y - startCoords.y;
+          startCoords = coords;
+          let x = parseFloat(start.getAttribute('cx')) + dx;
+          let y = parseFloat(start.getAttribute('cy')) + dy;
+          x = Math.min(Math.max(x, svgRect.left + svgPadding), svgRect.right - svgPadding);
+          y = Math.min(Math.max(y, svgRect.top + svgPadding), svgRect.bottom - svgPadding);
+          start.setAttribute('cx', x);
+          start.setAttribute('cy', y);
+          line.setAttribute('d', `M ${x} ${y} L ${mid1.getAttribute('cx')} ${mid1.getAttribute('cy')} L ${mid2.getAttribute('cx')} ${mid2.getAttribute('cy')} L ${end.getAttribute('cx')} ${end.getAttribute('cy')}`);
+        } else if (isDraggingEnd) {
+          const coords = getMouseCoords(event);
+          const dx = coords.x - endCoords.x;
+          const dy = coords.y - endCoords.y;
+          endCoords = coords;
+          let x = parseFloat(end.getAttribute('cx')) + dx;
+          let y = parseFloat(end.getAttribute('cy')) + dy;
+          x = Math.min(Math.max(x, svgRect.left + svgPadding), svgRect.right - svgPadding);
+          y = Math.min(Math.max(y, svgRect.top + svgPadding), svgRect.bottom - svgPadding);
+          end.setAttribute('cx', x);
+          end.setAttribute('cy', y);
+          line.setAttribute('d', `M ${start.getAttribute('cx')} ${start.getAttribute('cy')} L ${mid1.getAttribute('cx')} ${mid1.getAttribute('cy')} L ${mid2.getAttribute('cx')} ${mid2.getAttribute('cy')} L ${x} ${y}`);
+        } else if (isDraggingMid1) {
+          const coords = getMouseCoords(event);
+          const dx = coords.x - mid1Coords.x;
+          const dy = coords.y - mid1Coords.y;
+          mid1Coords = coords;
+          let x = parseFloat(mid1.getAttribute('cx')) + dx;
+          let y = parseFloat(mid1.getAttribute('cy')) + dy;
+          x = Math.min(Math.max(x, svgRect.left + svgPadding), svgRect.right - svgPadding);
+          y = Math.min(Math.max(y, svgRect.top + svgPadding), svgRect.bottom - svgPadding);
+          mid1.setAttribute('cx', x);
+          mid1.setAttribute('cy', y);
+          line.setAttribute('d', `M ${start.getAttribute('cx')} ${start.getAttribute('cy')} L ${x} ${y} L ${mid2.getAttribute('cx')} ${mid2.getAttribute('cy')} L ${end.getAttribute('cx')} ${end.getAttribute('cy')}`);
+        } else if (isDraggingMid2) {
+          const coords = getMouseCoords(event);
+          const dx = coords.x - mid2Coords.x;
+          const dy = coords.y - mid2Coords.y;
+          mid2Coords = coords;
+          let x = parseFloat(mid2.getAttribute('cx')) + dx;
+          let y = parseFloat(mid2.getAttribute('cy')) + dy;
+          x = Math.min(Math.max(x, svgRect.left + svgPadding), svgRect.right - svgPadding);
+          y = Math.min(Math.max(y, svgRect.top + svgPadding), svgRect.bottom - svgPadding);
+          mid2.setAttribute('cx', x);
+          mid2.setAttribute('cy', y);
+          line.setAttribute('d', `M ${start.getAttribute('cx')} ${start.getAttribute('cy')} L ${mid1.getAttribute('cx')} ${mid1.getAttribute('cy')} L ${x} ${y} L ${end.getAttribute('cx')} ${end.getAttribute('cy')}`);
+        }
+      }
+
+      function endDrag() {
+        isDraggingStart = false;
+        isDraggingEnd = false;
+        isDraggingMid1 = false;
+        isDraggingMid2 = false;
+      }
+
+      start.addEventListener('mousedown', startDragStart);
+      end.addEventListener('mousedown', startDragEnd);
+      mid1.addEventListener('mousedown', startDragMid1);
+      mid2.addEventListener('mousedown', startDragMid2);
+      svg.addEventListener('mousemove', drag);
+      svg.addEventListener('mouseup', endDrag);
+    </script>
+    </script>
+  </body>
+</html>
