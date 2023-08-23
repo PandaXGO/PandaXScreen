@@ -13,7 +13,6 @@
 
 ---
 
-
 ### ⭐️ 有什么功能？
 
 - <span class="tag done-tag">✔</span> **`多数据源`** - _MySQL，Postgresql,Tdengine，MQTT,Wensocket，http等。._
@@ -28,6 +27,9 @@
 - <span class="tag done-tag">✔</span> **`报表节点`** - _根据数据源生成报表。_
 - <span class="tag done-tag">✔</span> **`规则链设计`** - _规则链设计，作为物联网数据的链路过滤。_
 - <span class="tag done-tag">✔</span> **`在线报表设计`** - _可对设备数据，基础数据进行拖拽生成报表。_
+
+## 案例1
+<img src="image/al1.png"/>
 
 
 > **开发交流的 `QQ 2417920382` 群中会不定时一起投票未来的功能！**
