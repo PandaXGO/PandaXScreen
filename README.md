@@ -1,4 +1,4 @@
-# 组态大屏、规则链、报表设计器
+# 组态大屏、规则链
 
 <div align="center"><h3 align="center">物联网低代码引擎-组态大屏、规则链、报表系统</h3></div>
 <div align="center"><h3 align="center">组态大屏、规则链、报表系统，基于 Vue3.0 + TypeScript + vite2 + Element-plus技术完成</h3></div>
@@ -32,4 +32,4 @@
 <img src="image/al1.png"/>
 
 
-> **开发交流的 `QQ 2417920382` 群中会不定时一起投票未来的功能！**
+> **开发交流的 `QQ 2417920382` 也可根据需求进行定制！**
