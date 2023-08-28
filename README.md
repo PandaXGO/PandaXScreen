@@ -1,7 +1,7 @@
 # 组态大屏、规则链
 
 <div align="center"><h3 align="center">物联网低代码引擎-组态大屏、规则链、报表系统</h3></div>
-<div align="center"><h3 align="center">组态大屏、规则链、报表系统，基于 Vue3.0 + TypeScript + vite2 + Element-plus技术完成</h3></div>
+<div align="center"><h3 align="center">组态大屏、规则链、报表系统，基于 Vue3 + TypeScript + vite3 + Element-plus技术完成</h3></div>
 
 <img src="image/zt.gif"/>
 <table>
